@@ -14,7 +14,12 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
-const port = 3000;
+
+const port = process.env.PORT || 5000;
+
+if (!process.env.PORT && process.env.PORT) {
+  process.env.MONGODB_URL = process.env.MONGO_URI;
+}
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Hello, World!' });
@@ -29,6 +34,8 @@ app.use("/api", todoRoutes);
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+
 
 connectDB().catch((error) => {
   console.error('Failed to connect to the database:', error);
