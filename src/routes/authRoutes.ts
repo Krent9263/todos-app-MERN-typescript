@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { registerUser, loginUser, getUserById, getAllUsers } from "../controllers/authControllers";
+import { registerUser, loginUser, getUserById, getAllUsers, deleteUserById, updateUserById } from "../controllers/authControllers";
 import { authenticateToken, authorizeAdmin } from '../middleware/auth';
+import User from "../models/Users";
 
 const router = Router();
 
@@ -19,11 +20,11 @@ const router = Router();
  *           schema:
  *             type: object
  *             required:
- *               - name
+ *               - fullname
  *               - email
  *               - password
  *             properties:
- *               name:
+ *               fullname:
  *                 type: string
  *               email:
  *                 type: string
@@ -76,8 +77,8 @@ router.post('/login', loginUser);
  * @openapi
  * /api/user/{id}:
  *   get:
- *     summary: Get user by id
- *     description: Retrieves the user information by id
+ *     summary: Get user by userId
+ *     description: Retrieves the user information by userId
  *     tags: [Auth]
  *     parameters:
  *       - in: path
@@ -107,5 +108,65 @@ router.get('/user/:id', getUserById);
  *         description: List of users retrieved successfully
  */
 router.get('/users', authenticateToken, authorizeAdmin, getAllUsers);
+
+// delete user 
+/**
+ * @openapi
+ * /api/user/{id}/delete:
+ *   delete:
+ *     summary: Delete user by userId
+ *     description: Deletes a user from the system by userId
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the user to delete
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ */
+router.delete('/user/:id/delete', authenticateToken, authorizeAdmin, deleteUserById);
+
+// update user by id route
+/**
+ * @openapi
+ * /api/user/{id}/update:
+ *   put:
+ *     summary: Update user by userId
+ *     description: Updates a user's information by userId
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the user to update
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fullname:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       404:
+ *         description: User not found
+ */
+router.put('/user/:id/update', authenticateToken, updateUserById);
 
 export default router;
