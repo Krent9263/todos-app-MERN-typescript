@@ -1,0 +1,7 @@
+1 npm init -y 
+2 npm install -D typescript @types/node ts-node 
+3 npm install express
+4 npm i --save-dev @types/express
+5 npm install -g nodemon
+6 npm i mongoose
+7 npm i bcrypt
