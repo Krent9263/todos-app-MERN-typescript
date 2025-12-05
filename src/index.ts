@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
 import { swaggerSpec } from './config/swagger';
 import authRoutes from './routes/authRoutes';
 import { connectDB } from './config/database';
@@ -14,6 +15,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(morgan('dev'));
+app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173', credentials: true }));
 
 const port = process.env.PORT || 5000;
 

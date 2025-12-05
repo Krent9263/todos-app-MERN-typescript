@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import type { AuthRequest } from '../middleware/auth';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/Users';
@@ -140,4 +141,25 @@ export const updateUserById = async (req: Request, res: Response) => {
   }
 }
 
-export default { registerUser, loginUser, getUserById, getAllUsers, deleteUserById, updateUserById };
+// get user by getting on the token 
+export const getUser = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // Find user by ID
+    const user = await User.findById(userId).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+export default { registerUser, loginUser, getUserById, getAllUsers, deleteUserById, updateUserById, getUser };
