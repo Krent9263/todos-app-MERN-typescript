@@ -140,4 +140,21 @@ export const updateUserById = async (req: Request, res: Response) => {
   }
 }
 
-export default { registerUser, loginUser, getUserById, getAllUsers, deleteUserById, updateUserById };
+// authenticated get user handler
+export const getUser = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.userId;
+
+    // Find user by ID
+    const user = await User.findById(userId).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+export default { registerUser, loginUser, getUserById, getAllUsers, deleteUserById, updateUserById, getUser };

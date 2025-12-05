@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerUser, loginUser, getUserById, getAllUsers, deleteUserById, updateUserById } from "../controllers/authControllers";
+import { registerUser, loginUser, getUserById, getAllUsers, deleteUserById, updateUserById, getUser } from "../controllers/authControllers";
 import { authenticateToken, authorizeAdmin } from '../middleware/auth';
 import User from "../models/Users";
 
@@ -168,5 +168,22 @@ router.delete('/user/:id/delete', authenticateToken, authorizeAdmin, deleteUserB
  *         description: User not found
  */
 router.put('/user/:id/update', authenticateToken, updateUserById);
+
+// authenticated get user handler
+/**
+ * @openapi
+ * /api/user:
+ *   get:
+ *     summary: Get authenticated user
+ *     description: Retrieves the authenticated user's information
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Authenticated user retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ */
+router.get('/user', authenticateToken, getUser);  
+
 
 export default router;

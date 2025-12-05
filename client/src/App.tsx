@@ -1,36 +1,16 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import Login from './view/Login'
+import AppRoutes from './routes/appRoutes';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
 
+  const queryClient = new QueryClient();
   return (
     <>
-      <Login />
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1 className="text-3xl font-bold  text-white">Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p className="text-shadow-gray-800 text-fuchsia-950 text-bol">
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <QueryClientProvider client={queryClient}>
+        <AppRoutes />
+      </QueryClientProvider>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
