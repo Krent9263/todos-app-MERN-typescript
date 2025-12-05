@@ -33,16 +33,20 @@ const Register: React.FC = () => {
         if (!response.ok) {
           throw new Error(response.statusMessage || 'Registration failed. Please try again.');
         }
-        return response.data;
+        return  (
+                localStorage.setItem('token', response?.data?.token),
+                response?.data
+        )
       }catch(err){
         console.log(err);
         throw new Error(response.statusMessage || 'Registration failed. Please try again.');
       }
-
+      
     },
     onSuccess: () => {
       // In a real app, you might auto-login here or show a success message
-      navigate(RoutePath.HOME); 
+      navigate(RoutePath.HOME);
+      
     },
     onError: (error: Error) => {
       setServerError(error.message);

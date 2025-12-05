@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import type { AuthRequest } from '../middleware/auth';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/Users';
@@ -140,10 +141,14 @@ export const updateUserById = async (req: Request, res: Response) => {
   }
 }
 
-// authenticated get user handler
-export const getUser = async (req: Request, res: Response) => {
+// get user by getting on the token 
+export const getUser = async (req: AuthRequest, res: Response) => {
   try {
-    const userId = (req as any).user.userId;
+    const userId = req.user?.userId;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
 
     // Find user by ID
     const user = await User.findById(userId).select('-password');

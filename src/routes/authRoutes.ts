@@ -169,21 +169,21 @@ router.delete('/user/:id/delete', authenticateToken, authorizeAdmin, deleteUserB
  */
 router.put('/user/:id/update', authenticateToken, updateUserById);
 
-// authenticated get user handler
+// get user by getting on the token
+// get user route
 /**
  * @openapi
  * /api/user:
  *   get:
- *     summary: Get authenticated user
- *     description: Retrieves the authenticated user's information
+ *     summary: Get user by token
+ *     description: Retrieves the user information based on the provided JWT token
  *     tags: [Auth]
  *     responses:
  *       200:
- *         description: Authenticated user retrieved successfully
+ *         description: User retrieved successfully
  *       401:
  *         description: Unauthorized
  */
-router.get('/user', authenticateToken, getUser);  
-
+router.get('/user', authenticateToken, getUser);
 
 export default router;
